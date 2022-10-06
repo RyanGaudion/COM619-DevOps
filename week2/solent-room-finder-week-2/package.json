@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "open": "netlify open",
-    "prepare": "cd ../.. && husky install",
+    "prepare": "cd ../.. && husky install week2/solent-room-finder-week-2/.husky",
     "prettier": "prettier --write .",
     "types": "tsc"
   },

@@ -4,7 +4,7 @@
 echo "running pre-commit checks"
 
 ## prettier
-
-npm run  prettier
+cd week2/solent-room-finder-week-2
+npm run prettier
 npm run types
 npm run lint
