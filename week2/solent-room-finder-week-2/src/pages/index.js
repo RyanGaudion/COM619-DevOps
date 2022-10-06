@@ -5,11 +5,11 @@ import {
   XCircleIcon,
 } from "@heroicons/react/outline";
 import Head from "next/head";
-import { useState } from "react";
+import {useState} from "react";
 import Modal from "react-modal";
 import Filter from "../components/Filter";
 import RoomForm from "../components/RoomForm";
-import { rooms } from "../mocks/data";
+import {rooms} from "../mocks/data";
 
 export default function Home() {
   const [modalIsOpen, setModalIsOpen] = useState(false);

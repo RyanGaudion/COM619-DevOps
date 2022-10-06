@@ -1,4 +1,4 @@
-import { CloudUploadIcon } from "@heroicons/react/outline";
+import {CloudUploadIcon} from "@heroicons/react/outline";
 
 export default function RoomForm() {
   return (

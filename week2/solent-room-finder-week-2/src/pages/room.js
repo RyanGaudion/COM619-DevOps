@@ -1,4 +1,4 @@
-import { ChevronRightIcon, HomeIcon } from "@heroicons/react/outline";
+import {ChevronRightIcon, HomeIcon} from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
 export default function Room() {
