@@ -9,6 +9,7 @@
     "lint": "next lint",
     "lint-output": "next lint --output-file eslint-results.sarif",
     "types": "tsc",
+    "prettier": "prettier --write .",
     "open": "netlify open"
   },
   "dependencies": {
