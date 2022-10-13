@@ -17,12 +17,9 @@ jobs:
       - name: Run ESLint
         working-directory: week3/solent-room-finder-week-3
         run: npm run lint
-        continue-on-error: true
       - name: Run TSC
         working-directory: week3/solent-room-finder-week-3
         run: npm run types
-        continue-on-error: true
       - name: Run Prettier
         working-directory: week3/solent-room-finder-week-3
         run: npm run prettier
-        continue-on-error: true
