@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Move to correct location
+        run: cd week/solent-room-finder-week-3
       - name: Install Dev Dependencies
         run: npm install --only=dev
       - name: Run ESLint
