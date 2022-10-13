@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Move to correct location
-        run: cd week3/solent-room-finder-week-3
       - name: Install Dev Dependencies
+        working-directory: week3/solent-room-finder-week-3
         run: npm install --only=dev
       - name: Run ESLint
+        working-directory: week3/solent-room-finder-week-3
         run: npm run lint
         continue-on-error: true
