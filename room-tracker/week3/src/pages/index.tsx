@@ -10,9 +10,11 @@ import {useState} from "react";
 import Modal from "react-modal";
 import Filter from "../components/Filter";
 import RoomForm from "../components/RoomForm";
-import {rooms} from "../mocks/data";
+import Room from "../../models/Room";
+import {GetServerSideProps} from "next";
+import dbConnect from "../../lib/dbConnect";
 
-export default function Home() {
+export default function Home({rooms}) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [capacity, setCapacity] = useState(1);
 
@@ -66,9 +68,12 @@ export default function Home() {
                       className={(i + 1) % 2 === 0 ? "bg-gray-100" : ""}
                     >
                       <td className="p-2 text-blue rounded-l-lg">
-                        <a className="cursor-pointer font-semibold">
-                          {r.number}
-                        </a>
+                        <Link href={`/rooms/${r._id}`}>
+                          <a className="cursor-pointer font-semibold">
+                            {r.building}
+                            {r.number}
+                          </a>
+                        </Link>
                       </td>
                       <td> {r.building}</td>
                       <td> {r.capacity}</td>
@@ -116,3 +121,13 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  dbConnect();
+
+  //Lean converts mongodb model into standard javascript model
+  const results = await Room.find({}).lean();
+  const rooms = results.map((doc) => ({...doc, ...{_id: doc._id.toString()}}));
+
+  return {props: {rooms: rooms}};
+};
