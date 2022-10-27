@@ -9,7 +9,7 @@ export default function BreadCrumb(props: BreadCrumbProps) {
   const {label} = props;
 
   return (
-    <div className="bg-white  mt-11 p-2 rounded-lg shadow-md flex">
+    <div className="bg-white  mt-11 p-2 rounded-lg shadow-md flex" data-test='bread-crumb'>
       <HomeIcon className="h-7 w-7" />
       <Link href="/">
         <a className=" cursor-pointer font-semibold  mt-1 ml-1"> Home </a>

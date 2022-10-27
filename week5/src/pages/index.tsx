@@ -39,7 +39,7 @@ export default function Home({rooms}) {
         <div className="max-w-[80%] mx-auto mt-11">
           <div>
             <Link href="/create">
-              <a className="blue-button">
+              <a className="blue-button" data-test="add-room-button">
                 <PlusIcon className="h-5 w-5" /> Add Room{" "}
               </a>
             </Link>
@@ -61,6 +61,7 @@ export default function Home({rooms}) {
                     <tr
                       key={r._id}
                       className={(i + 1) % 2 === 0 ? "bg-gray-100" : ""}
+                      data-test="room-item"
                     >
                       <td className="p-2 text-blue rounded-l-lg">
                         <Link href={`/rooms/${r._id}`}>
