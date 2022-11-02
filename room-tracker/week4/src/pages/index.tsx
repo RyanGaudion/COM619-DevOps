@@ -1,19 +1,31 @@
-import {PlusIcon} from "@heroicons/react/outline";
+import {PlusIcon, TrashIcon, PencilIcon} from "@heroicons/react/outline";
 import {GetServerSideProps} from "next";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {useState} from "react";
 import dbConnect from "../../lib/dbConnect";
 import Room from "../../models/Room";
 import Filter from "../components/Filter";
+import { useMutation } from "react-query";
+import axios from "axios"
+import Alert from "../components/Alert";
+
 
 export default function Home({rooms}) {
   const [capacity, setCapacity] = useState(1);
   const [buildings, setBuildings] = useState([]);
   const [types, setTypes] = useState([]);
+  const [roomState, setRoomStates] = useState(rooms)
+  const router = useRouter();
 
   const handleSlide = (n) => setCapacity(n);
   const handleReset = () => setCapacity(1);
+
+  const {isSuccess, isError, mutate} = useMutation(async (id: string) => {
+    await axios.delete(`/api/rooms/${id}`);
+    setRoomStates(roomState.filter(r => r._id !== id))
+  })
 
   return (
     <div className="flex">
@@ -40,6 +52,8 @@ export default function Home({rooms}) {
               </a>
             </Link>
           </div>
+          {isSuccess && <Alert label="Room Delete" variant="success"/>}
+          {isError && <Alert label="Room Not Deleted" variant="warning"/>}
           <div className="bg-white mx-auto mt-11 p-5 rounded-lg shadow-md">
             <table className="min-w-full">
               <thead>
@@ -47,11 +61,12 @@ export default function Home({rooms}) {
                   <th className="p-3 rounded-tl-lg">Room Number</th>
                   <th>Building </th>
                   <th>Student Capacity</th>
-                  <th className="rounded-tr-lg">Type</th>
+                  <th>Type</th>
+                  <th className="rounded-tr-lg"></th>
                 </tr>
               </thead>
               <tbody>
-                {rooms
+                {roomState
                   .filter((r) => r.capacity >= capacity)
                   .filter((r) => {
                     if(buildings.length == 0){return true}
@@ -78,6 +93,10 @@ export default function Home({rooms}) {
                       <td> {r.building}</td>
                       <td> {r.capacity}</td>
                       <td className="rounded-r-lg"> {r.type.name}</td>
+                      <td className="flex">
+                        <PencilIcon className="h-6 w-6 mt-2 cursor-pointer" onClick={() => router.push(`/rooms/${r._id}/edit`)}/>
+                        <TrashIcon className="h-6 w-6 mt-2 ml-6 cursor-pointer" onClick={() => mutate(r._id)}/>
+                      </td>
                     </tr>
                   ))}
               </tbody>
