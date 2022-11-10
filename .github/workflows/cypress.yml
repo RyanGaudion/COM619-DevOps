@@ -16,6 +16,6 @@ jobs:
           build: npm run build
           start: npm run start
           wait-on: "http://localhost:3000"
-        working-directory: week6
+          working-directory: week6
         env:
           MONGODB_URI: ${{ secrets.TestMongoDb }}
