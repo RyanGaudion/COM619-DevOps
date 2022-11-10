@@ -57,7 +57,7 @@ export default function Home({rooms}) {
                 <PlusIcon className="h-5 w-5" /> Add Room
               </a>
             </Link>
-            {isSuccess && <Alert label="Room Deleted" variant="success" />}
+            {isSuccess && <Alert label="Room Deleted" variant="success" data-test="success-alert"/>}
 
             {isError && (
               <Alert label="Could not delete room" variant="warning" />
@@ -100,7 +100,7 @@ export default function Home({rooms}) {
                         </Link>
                       </td>
                       <td> {r.building}</td>
-                      <td> {r.capacity}</td>
+                      <td data-test="capacity"> {r.capacity}</td>
                       <td className="rounded-r-lg">{r.type.name}</td>
                       <td className="flex">
                         <PencilIcon
