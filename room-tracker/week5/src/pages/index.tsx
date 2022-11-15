@@ -10,6 +10,8 @@ import dbConnect from "../../lib/dbConnect";
 import Room from "../../models/Room";
 import Alert from "../components/Alert";
 import Filter from "../components/Filter";
+import {useSession} from "next-auth/react"
+
 
 export default function Home({rooms}) {
   const [capacity, setCapacity] = useState(0);
@@ -31,6 +33,8 @@ export default function Home({rooms}) {
     setRoomSate(roomSate.filter((r) => r._id !== id));
   });
 
+  const {data:session} = useSession()
+
   return (
     <div className="flex">
       <Head>
@@ -48,7 +52,8 @@ export default function Home({rooms}) {
       <div className="min-w-full pr-20">
         <div className="max-w-[80%] mx-auto mt-11">
           <div>
-            <Link href="/create">
+            {session && (
+              <Link href="/create">
               <a
                 className="blue-button mb-7"
                 data-cy="add-room-button"
@@ -57,6 +62,8 @@ export default function Home({rooms}) {
                 <PlusIcon className="h-5 w-5" /> Add Room
               </a>
             </Link>
+            )}
+
             {isSuccess && <Alert label="Room Deleted" variant="success" />}
 
             {isError && (
@@ -102,7 +109,8 @@ export default function Home({rooms}) {
                       <td> {r.building}</td>
                       <td> {r.capacity}</td>
                       <td className="rounded-r-lg">{r.type.name}</td>
-                      <td className="flex">
+                      {session && (
+                        <td className="flex">
                         <PencilIcon
                           data-test="edit-icon"
                           className="h-6 w-6 mt-2 cursor-pointer"
@@ -114,6 +122,7 @@ export default function Home({rooms}) {
                           onClick={() => mutate(r._id)}
                         />
                       </td>
+                      )}
                     </tr>
                   ))}
               </tbody>

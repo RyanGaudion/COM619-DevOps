@@ -1,11 +1,19 @@
 import dbConnect from "../../../../lib/dbConnect";
 import Room from "../../../../models/Room";
+import {unstable_getServerSession} = from "next-auth"
+import {authOptions} from "../auth/[...nextauth]"
 
 export default async function handler(req, res) {
   const {
     query: {id},
     method,
   } = req;
+
+  const session = await unstable_getServerSession(req, res, authOptions);
+
+  if(!session){
+    return res.status(401).json({success: false, message: "unauthorised"})
+  }
 
   await dbConnect();
   switch (method) {

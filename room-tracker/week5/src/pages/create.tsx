@@ -3,6 +3,8 @@ import {useMutation} from "react-query";
 import Alert from "../components/Alert";
 import BreadCrumb from "../components/BreadCrumb";
 import RoomForm, {RoomValues} from "../components/RoomForm";
+import {useSession} from "next-auth/react"
+
 
 export default function Create() {
   const {isLoading, isSuccess, isError, mutate} = useMutation(
@@ -10,6 +12,15 @@ export default function Create() {
       return axios.post("/api/rooms/", room);
     }
   );
+
+  const {data:session} = useSession()
+
+  if (!session){
+    return (
+    <div className="flex justify-center items-center h-[100vh">
+      <h1>Unauthorised</h1>
+    </div>)
+  }
 
   return (
     <div className="max-w-[80%] mx-auto mt-11">
