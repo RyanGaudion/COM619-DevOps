@@ -1,7 +1,7 @@
 import {LoginIcon, LogoutIcon} from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
-import {signIn, signOut, useSession} from "next-auth"
+import {signIn, signOut, useSession} from "next-auth/react"
 import Button from "./Button";
 
 export default function Header() {
