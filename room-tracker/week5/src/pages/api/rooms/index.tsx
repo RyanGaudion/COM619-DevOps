@@ -1,6 +1,6 @@
 import Room from "../../../../models/Room";
 import dbConnect from "../../../../lib/dbConnect";
-import {unstable_getServerSession} = from "next-auth"
+import {unstable_getServerSession} from "next-auth"
 import {authOptions} from "../auth/[...nextauth]"
 
 export default async function handler(req, res) {

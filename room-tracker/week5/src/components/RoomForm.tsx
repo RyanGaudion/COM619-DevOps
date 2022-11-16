@@ -1,8 +1,14 @@
-import {CloudUploadIcon} from "@heroicons/react/outline";
+import {CloudUploadIcon, TrashIcon} from "@heroicons/react/outline";
 import {useEffect} from "react";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {SpinnerCircular} from "spinners-react";
 import {buildings, roomTypes} from "../data/";
+import { useSession } from "next-auth/react";
+import {thumbnail} from "@cloudinary/url-gen/actions/resize"
+import {AdvancedImage } from "@cloudinary/react"
+import useCloudinary from "../hooks/useCloudinary";
+import { useState } from "react";
+import { stringify } from "querystring";
 
 export interface RoomFormProps {
   onSubmit: SubmitHandler<RoomValues>;
@@ -14,6 +20,7 @@ export interface RoomFormProps {
 
 export interface RoomValues {
   number: string;
+  photos: string[];
   building: string;
   capacity: number;
   notes?: string;
@@ -36,10 +43,46 @@ export default function RoomForm(props: RoomFormProps) {
     defaultValues: {...values, ...{type: values ? values.type.code : ""}},
   });
 
+  const [thumb, setThumb] = useState(values?.photos[0] ? values?.photos[0] : "")
+
+  const {data: {user}} = useSession();
+
   useEffect(() => {
-    triggerReset && reset();
+    if(triggerReset){
+      reset()
+      setThumb("")
+    }
   }, [triggerReset, reset]);
 
+  const {Cloudinary} = useCloudinary()
+
+  const handleUpload = () => {
+    if(!process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME){
+      console.error("Please set ENV vars")
+      return false
+    }
+
+    console.log(process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER + "/" + user.id + "/")
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const imageWidget = cloudinary.createUploadWidget({
+      cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, 
+      uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET, 
+      folder: process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER + "/" + user.id + "/",
+      sources: ["local", "camera"]},
+      (error, result) => { 
+        if (!error && result && result.event === "success") { 
+          console.log("Done! Here is the image info: ", result.info); 
+          setThumb(result.info.public_id)
+        }//22:20
+      }
+    )
+    
+    imageWidget.open()
+
+
+  }
   return (
     <form
       onSubmit={handleSubmit((data) =>
@@ -51,11 +94,18 @@ export default function RoomForm(props: RoomFormProps) {
               code: data.type as string,
             },
           },
+          ...{photos: [thumb]}
         })
       )}
     >
+      {thumb && 
+      (<>
+        <TrashIcon className="w-6 h-6 cursor-pointer ml-5 mb-1" onClick={() => setThumb("")}/>
+        <AdvancedImage className="border-4 border-gray-100 rounded-md mb-5 ml-5" 
+        cldImg={Cloudinary.image(thumb).resize(thumbnail().width(150).height(150))}/>
+      </>)}
       <div className="flex flex-col align-middle  space-y-2">
-        <a className="gray-outline-button">
+        <a className="gray-outline-button" onClick={handleUpload}>
           <CloudUploadIcon className="h-5 w-5" /> Add Room Photos
         </a>
         <label className="font-semibold"> Building</label>
