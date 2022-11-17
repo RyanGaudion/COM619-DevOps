@@ -1,10 +1,9 @@
 import axios from "axios";
+import useSession from "../hooks/useNextAuth"
 import {useMutation} from "react-query";
 import Alert from "../components/Alert";
 import BreadCrumb from "../components/BreadCrumb";
 import RoomForm, {RoomValues} from "../components/RoomForm";
-import {useSession} from "next-auth/react"
-
 
 export default function Create() {
   const {isLoading, isSuccess, isError, mutate} = useMutation(
@@ -12,14 +11,13 @@ export default function Create() {
       return axios.post("/api/rooms/", room);
     }
   );
-
-  const {data:session} = useSession()
-
-  if (!session && !process.env.NEXT_PUBLIC_TESTING){
+  const {data: session} = useSession();
+  if (!session) {
     return (
-    <div className="flex justify-center items-center h-[100vh">
-      <h1>Unauthorised</h1>
-    </div>)
+      <div className="flex justify-center items-center h-[100vh]">
+        <h1> Unauthorised </h1>
+      </div>
+    );
   }
 
   return (
@@ -30,7 +28,10 @@ export default function Create() {
         <RoomForm
           isLoading={isLoading}
           triggerReset={isSuccess}
-          onSubmit={(room) => mutate(room)}
+          onSubmit={(room) => {
+            console.log(room);
+            mutate(room);
+          }}
         />
         {isError && (
           <div className="mt-5">
