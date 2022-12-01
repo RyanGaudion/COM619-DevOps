@@ -17,7 +17,8 @@
     "cypress:open": "cypress open",
     "cypress:run:chrome": "cypress run --browser chrome",
     "cypress:run": "cypress run",
-    "test:unit": "jest --watch"
+    "test:unit": "jest --watch",
+    "test:ci": "jest --ci"
   },
   "dependencies": {
     "@cloudinary/react": "^1.5.0",
