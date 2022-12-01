@@ -23,3 +23,6 @@ jobs:
       - name: Run Prettier
         working-directory: week3/solent-room-finder-week-3
         run: npm run prettier
+      - name: Run Tests
+        working-directory: week9
+        run: npm run test:ci
